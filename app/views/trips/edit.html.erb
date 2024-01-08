@@ -1,5 +1,13 @@
-<h1>Edit Trip</h1>
-<%= render 'form', trip: @trip %>
-
-<%= link_to 'Show', @trip %> |
-<%= link_to 'Back', trips_path %>
+<div class="overflow-y-auto overflow-x-hidden fixed flex top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+        <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+            <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Modifier un voyage</h3>
+                <div onclick="window.location.href='<%= trips_path %>'" class="cursor-pointer text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    Annuler
+                </div>
+            </div>
+            <%= render 'form', trip: @trip %>
+        </div>
+    </div>
+</div>

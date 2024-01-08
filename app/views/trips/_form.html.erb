@@ -1,41 +1,61 @@
-<%= form_with(model: trip, local: true) do |form| %>
-  <% if trip.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(trip.errors.count, "error") %> prohibited this trip from being saved:</h2>
-      <ul>
-        <% trip.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+<%= form_with(model: trip, local: true, data: { turbo: false }) do |form| %>
+
+    <% if trip.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(trip.errors.count, "error") %> prohibited this trip from being saved:</h2>
+        <ul>
+          <% trip.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="grid gap-4 mb-4 sm:grid-cols-2">
+        <div>
+          <%= form.label :destination, 
+              class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"%>
+          <%= form.text_field :destination, 
+              class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500", 
+              placeholder: "Destination",
+              required: true %>        
+        </div>
+        <div>
+          <%= form.label :user_id, 
+              class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+            <%= form.select :user_id, 
+              User.all.map { |user| [user.nom, user.id] }, 
+              { prompt: true }, 
+              { class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500", 
+              required: true } 
+            %>
+        </div>
+        <div>
+          <%= form.label :start_date, 
+              class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+          <%= form.date_field :start_date, 
+              class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500", 
+              placeholder: "Date de départ", 
+              required: true %>
+          </div>
+
+        <div>
+          <%= form.label :end_date, 
+              class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+          <%= form.date_field :end_date,
+              class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500", 
+              placeholder: "Date de retour", 
+              required: true %>
+        </div>
+        <div class="sm:col-span-2">
+          <%= form.label :description, 
+                class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+
+          <%= form.text_area :description, 
+              class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500", 
+              placeholder: "Description", 
+              required: true %>
+        </div>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= form.label :destination %>
-    <%= form.text_field :destination %>
-  </div>
-
-  <div class="field">
-    <%= form.label :description %>
-    <%= form.text_area :description %>
-  </div>
-
-  <div class="field">
-    <%= form.label :start_date %>
-    <%= form.date_field :start_date %>
-  </div>
-
-  <div class="field">
-    <%= form.label :end_date %>
-    <%= form.date_field :end_date %>
-  </div>
-
-  <div class="field">
-    <%= form.label :user_id %>
-    <%= form.collection_select :user_id, User.all, :id, :nom %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
+    <%= form.submit "Enregistrer", 
+        class: "inline-flex items-center bg-green-400 text-white rounded-lg px-4 py-2.5 focus:outline-none hover:bg-green-500 focus:ring-4 focus:ring-green-300" %>
 <% end %>

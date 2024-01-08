@@ -1,10 +1,90 @@
-<h1><%= @trip.destination %></h1>
-<p><strong>Description:</strong> <%= @trip.description %></p>
-<p><strong>Start Date:</strong> <%= @trip.start_date %></p>
-<p><strong>End Date:</strong> <%= @trip.end_date %></p>
+<div class="overflow-y-auto overflow-x-hidden fixed flex top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+        <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+            <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Afficher un voyage</h3>
+                <div onclick="window.location.href='<%= trips_path %>'" class="cursor-pointer text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    Annuler
+                </div>
+            </div>
+            <%= form_with(model: @trip, local: true, data: { turbo: false }) do |form| %>
+                <div class="grid gap-4 mb-4 sm:grid-cols-2">
+                    <div>
+                    <%= form.label :destination, 
+                        class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"%>
+                    <%= form.text_field :destination, 
+                        class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500", 
+                        placeholder: "Destination",
+                        disabled: true,
+                        required: true %>        
+                    </div>
+                    <div>
+                    <%= form.label :user_id, 
+                        class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+                    <%= form.select :user_id, 
+                        User.all.map { |user| [user.nom, user.id] }, 
+                        { prompt: true }, 
+                        { class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500", 
+                        disabled: true,
+                        required: true } 
+                    %>
+                    </div>
+                    <div>
+                    <%= form.label :start_date, 
+                        class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+                    <%= form.date_field :start_date, 
+                        class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500", 
+                        placeholder: "Date de départ", 
+                        disabled: true,
+                        required: true %>
+                    </div>
 
-<%= link_to 'Edit', edit_trip_path(@trip) %> |
-<%= link_to 'Back', trips_path %> |
-<%= form_with(model: @trip, method: :delete, local: false) do |form| %>
-    <%= form.submit 'Delete' %>
-<% end %>
+                    <div>
+                    <%= form.label :end_date, 
+                        class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+                    <%= form.date_field :end_date,
+                        class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500", 
+                        placeholder: "Date de retour", 
+                        disabled: true,
+                        required: true %>
+                    </div>
+                    <div class="sm:col-span-2">
+                    <%= form.label :description, 
+                            class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+
+                    <%= form.text_area :description, 
+                        class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500", 
+                        placeholder: "Description",
+                        disabled: true, 
+                        required: true %>
+                    </div>
+                </div>
+                <button onclick="window.location.href='<%= edit_trip_path(@trip) %>'" type="button"
+                    class="inline-flex items-center bg-green-400 text-white rounded-lg px-4 py-2.5 focus:outline-none hover:bg-green-500 focus:ring-4 focus:ring-green-300">
+                    Modifier
+                </button>
+                <button onclick="deleteItem()" type="button"
+                    class="inline-flex items-center bg-red-400 text-white rounded-lg px-4 py-2.5 focus:outline-none hover:bg-red-500 focus:ring-4 focus:ring-red-300">
+                    Supprimer
+                </button>
+            <% end %>
+        </div>
+    </div>
+</div>
+
+<script>
+    // J'ai fait cette fonction en JS car je n'ai pas réussi à faire fonctionner un form dans un form
+
+    const deleteItem = () => {
+        const form = new FormData();
+        // J'ai ajouté cette ligne pour que la suppression fonctionne, sinon j'avais une erreur CSRF
+        form.append("authenticity_token", "<%= form_authenticity_token %>");
+        fetch("<%= trip_path(@trip) %>", {
+            method: "DELETE",
+            body: form
+        }).then(() => {
+            // Je redirige vers la page des utilisateurs
+            window.location.href = "<%= trips_path %>";
+        });
+    }
+</script>
