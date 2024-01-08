@@ -1,0 +1,8 @@
+<h1><%= @user.nom %></h1>
+<p><strong>Email:</strong> <%= @user.email %></p>
+
+<%= link_to 'Edit', edit_user_path(@user) %> |
+<%= link_to 'Back', users_path %> |
+<%= form_with(model: @user, method: :delete, local: false) do |form| %>
+    <%= form.submit 'Delete' %>
+<% end %>

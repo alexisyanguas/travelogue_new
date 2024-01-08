@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  resources :users do
+    resources :trips # Routes imbriquées pour les voyages liés à un utilisateur
+  end
+
+  resources :trips # Routes pour les voyages indépendants des utilisateurs
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
