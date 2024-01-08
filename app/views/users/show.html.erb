@@ -1,8 +1,49 @@
-<h1><%= @user.nom %></h1>
-<p><strong>Email:</strong> <%= @user.email %></p>
+<div class="overflow-y-auto overflow-x-hidden fixed flex top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+        <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+            <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Afficher un utilisateur</h3>
+                <div onclick="window.location.href='<%= users_path %>'" class="cursor-pointer text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    Annuler
+                </div>
+            </div>
+            <%= form_with(model: @user, local: true) do |form| %>
+                <div class="grid gap-4 mb-4 sm:grid-cols-2">
+                    <div>
+                    <%= form.label :nom, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"%>
+                    <%= form.text_field :nom, disabled: true, class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500", placeholder: "Nom d'utilisateur", required: true %>
+                    </div>
+                    <div>
+                    <%= form.label :email, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+                    <%= form.email_field :email, disabled: true, class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500", placeholder: "Adresse mail", required: true %>
+                    </div>
+                </div>
+                <button onclick="window.location.href='<%= edit_user_path(@user) %>'" type="button"
+                    class="inline-flex items-center bg-green-400 text-white rounded-lg px-4 py-2.5 focus:outline-none hover:bg-green-500 focus:ring-4 focus:ring-green-300">
+                    Modifier
+                </button>
+                <button onclick="deleteUser()" type="button"
+                    class="inline-flex items-center bg-red-400 text-white rounded-lg px-4 py-2.5 focus:outline-none hover:bg-red-500 focus:ring-4 focus:ring-red-300">
+                    Supprimer
+                </button>
+            <% end %>
 
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %> |
-<%= form_with(model: @user, method: :delete, local: false) do |form| %>
-    <%= form.submit 'Delete' %>
-<% end %>
+        </div>
+    </div>
+</div>
+
+<script>
+    const deleteUser = () => {
+        const form = new FormData();
+        form.append("_method", "delete");
+        form.append("authenticity_token", "<%= form_authenticity_token %>");
+        fetch("<%= user_path(@user) %>", {
+            method: "DELETE",
+            body: form
+        }).then(() => {
+            window.location.href = "<%= users_path %>";
+        });
+    
+    }
+
+</script>
