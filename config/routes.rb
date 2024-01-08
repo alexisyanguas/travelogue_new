@@ -1,9 +1,6 @@
 Rails.application.routes.draw do
-  resources :users do
-    resources :trips # Routes imbriquées pour les voyages liés à un utilisateur
-  end
-
-  resources :trips # Routes pour les voyages indépendants des utilisateurs
+  resources :users # Routes pour les utilisateurs (/users, /users/new, /users/:id, /users/:id/edit)
+  resources :trips # Routes pour les voyages (/trips, /trips/new, /trips/:id, /trips/:id/edit)
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
